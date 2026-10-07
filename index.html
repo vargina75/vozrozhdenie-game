@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эпоха Возрождения | Обучающая игра</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'EB Garamond', serif;
+            background: linear-gradient(135deg, #faf6f0 0%, #f0ebe0 100%);
+            color: #3a2a1a;
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-size: 19px;
+            line-height: 1.7;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #fff9f0 0%, #f5edd6 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(139, 90, 43, 0.15);
+            border: 3px solid #c9a96e;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 700;
+            color: #5c3a21;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            font-style: italic;
+        }
+
+        .header .subtitle {
+            font-size: 1.6rem;
+            color: #8b6f47;
+            font-style: italic;
+            letter-spacing: 1px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .progress-container {
+            background: linear-gradient(135deg, #fff9f0 0%, #f5edd6 100%);
+            border: 3px solid #c9a96e;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(139, 90, 43, 0.1);
+        }
+
+        .progress-label {
+            font-family: 'Cormorant Garamond', serif;
+            color: #5c3a21;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e8dcc8;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #c9a96e;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #c9a96e, #b8956a, #a07840);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .element-btn {
+            background: linear-gradient(135deg, #fff9f0 0%, #f5edd6 100%);
+            border: 3px solid #c9a96e;
+            border-radius: 15px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(139, 90, 43, 0.15);
+        }
+
+        .element-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(139, 90, 43, 0.25);
+            border-color: #a07840;
+        }
+
+        .element-btn.visited {
+            border-color: #6b8e23 !important;
+            border-width: 3px;
+            box-shadow: 0 0 15px rgba(107, 142, 35, 0.3);
+        }
+
+        .element-btn.visited::after {
+            content: '✓';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #6b8e23;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .element-btn h3 {
+            font-family: 'Playfair Display', serif;
+            color: #5c3a21;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .element-btn p {
+            color: #6b5a4a;
+            font-size: 1.15rem;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .test-btn-container {
+            text-align: center;
+            margin: 50px 0;
+        }
+
+        .test-btn {
+            background: linear-gradient(135deg, #c9a96e, #a07840);
+            border: none;
+            border-radius: 50px;
+            padding: 25px 70px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(160, 120, 64, 0.3);
+            letter-spacing: 2px;
+            font-style: italic;
+        }
+
+        .test-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(160, 120, 64, 0.4);
+        }
+
+        .test-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(58, 42, 26, 0.85);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #fff9f0 0%, #f5edd6 100%);
+            border: 4px solid #c9a96e;
+            border-radius: 20px;
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 50px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(139, 90, 43, 0.3);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-family: 'Playfair Display', serif;
+            color: #5c3a21;
+            font-size: 2.4rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid #c9a96e;
+            padding-bottom: 15px;
+            font-style: italic;
+        }
+
+        .modal-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: #8b6f47;
+            font-size: 1.5rem;
+            margin: 25px 0 15px 0;
+            font-weight: 700;
+        }
+
+        .modal-content p {
+            color: #3a2a1a;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .example-box {
+            background: rgba(201, 169, 110, 0.15);
+            border-left: 5px solid #c9a96e;
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 8px;
+        }
+
+        .error-box {
+            background: rgba(205, 92, 92, 0.1);
+            border-left: 5px solid #cd5c5c;
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 8px;
+        }
+
+        .info-box {
+            background: rgba(107, 142, 35, 0.1);
+            border-left: 5px solid #6b8e23;
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 8px;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, rgba(201, 169, 110, 0.2), rgba(160, 120, 64, 0.1));
+            border-left: 5px solid #c9a96e;
+            border-right: 5px solid #c9a96e;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .quote-text {
+            font-size: 1.3rem;
+            color: #5c3a21;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .quote-author {
+            font-size: 1.1rem;
+            color: #8b6f47;
+            font-weight: 600;
+        }
+
+        .painting-frame, .painting-item {
+            background: #fff;
+            border: 2px solid #c9a96e;
+            border-radius: 6px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 500px;
+        }
+
+        .paintings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px auto;
+            max-width: 900px;
+        }
+
+        .painting-item {
+            max-width: none;
+            margin: 0;
+        }
+
+        .painting-inner, .painting-item-inner {
+            background: transparent;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .painting-img, .painting-item img {
+            max-height: 400px;
+            width: auto;
+            max-width: 100%;
+            display: block;
+            border-radius: 2px;
+        }
+
+        .painting-caption, .painting-item-caption {
+            text-align: center;
+            font-style: italic;
+            color: #3a2a1a;
+            margin-top: 10px;
+            font-size: 1rem;
+            font-weight: normal;
+            background: transparent;
+            padding: 5px;
+        }
+
+        .painting-fallback {
+            width: 100%;
+            min-height: 300px;
+            background: linear-gradient(135deg, #4a3a2a 0%, #6b5a4a 50%, #4a3a2a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            text-align: center;
+            color: #f5edd6;
+            border-radius: 2px;
+        }
+
+        .painting-fallback-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f5edd6;
+            font-style: italic;
+        }
+
+        .painting-fallback-author {
+            font-size: 1.1rem;
+            color: #d4a574;
+            margin-bottom: 15px;
+        }
+
+        .painting-fallback-desc {
+            font-size: 0.95rem;
+            color: #e8dcc8;
+            line-height: 1.5;
+            max-width: 400px;
+            font-style: italic;
+        }
+
+        .close-btn {
+            background: linear-gradient(135deg, #6b8e23, #556b2f);
+            border: none;
+            border-radius: 30px;
+            padding: 18px 50px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(107, 142, 35, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(107, 142, 35, 0.4);
+        }
+
+        .test-container {
+            display: none;
+            background: linear-gradient(135deg, #fff9f0 0%, #f5edd6 100%);
+            border: 4px solid #c9a96e;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 950px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(139, 90, 43, 0.2);
+        }
+
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #fff9f0, #f0e6d3);
+            border: 3px solid #c9a96e;
+            border-radius: 15px;
+            padding: 18px 30px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: #5c3a21;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(139, 90, 43, 0.2);
+            font-weight: 600;
+        }
+
+        .question {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: rgba(255, 249, 240, 0.8);
+            border-radius: 12px;
+            border: 2px solid #c9a96e;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            color: #3a2a1a;
+            margin-bottom: 18px;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-option {
+            background: rgba(255, 249, 240, 0.9);
+            border: 2px solid #c9a96e;
+            border-radius: 10px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #3a2a1a;
+            font-size: 1.2rem;
+            font-family: 'EB Garamond', serif;
+        }
+
+        .answer-option:hover {
+            background: rgba(201, 169, 110, 0.2);
+            transform: translateX(8px);
+        }
+
+        .answer-option.selected {
+            background: rgba(160, 120, 64, 0.2);
+            border-color: #a07840;
+        }
+
+        .answer-option.correct {
+            background: rgba(107, 142, 35, 0.2);
+            border-color: #6b8e23;
+        }
+
+        .answer-option.incorrect {
+            background: rgba(205, 92, 92, 0.2);
+            border-color: #cd5c5c;
+        }
+
+        .hint-btn {
+            background: rgba(201, 169, 110, 0.3);
+            border: 2px solid #c9a96e;
+            border-radius: 25px;
+            padding: 10px 25px;
+            color: #5c3a21;
+            cursor: pointer;
+            font-size: 1.05rem;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .hint-btn:hover {
+            background: rgba(201, 169, 110, 0.5);
+        }
+
+        .hint-text {
+            display: none;
+            color: #6b5a4a;
+            font-style: italic;
+            margin-top: 12px;
+            padding: 15px;
+            background: rgba(201, 169, 110, 0.15);
+            border-radius: 8px;
+        }
+
+        .submit-test-btn {
+            background: linear-gradient(135deg, #6b8e23, #556b2f);
+            border: none;
+            border-radius: 30px;
+            padding: 20px 60px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(107, 142, 35, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .submit-test-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(107, 142, 35, 0.4);
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #fff9f0 0%, #f5edd6 100%);
+            border: 4px solid #c9a96e;
+            border-radius: 20px;
+            max-width: 750px;
+            margin: 50px auto;
+            box-shadow: 0 20px 60px rgba(139, 90, 43, 0.2);
+        }
+
+        .results h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .results.success h2 { color: #6b8e23; }
+        .results.failure h2 { color: #a07840; }
+
+        .results p {
+            font-size: 1.5rem;
+            color: #3a2a1a;
+            margin-bottom: 35px;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #c9a96e, #a07840);
+            border: none;
+            border-radius: 30px;
+            padding: 18px 50px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(160, 120, 64, 0.3);
+            margin: 12px;
+            letter-spacing: 1px;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(160, 120, 64, 0.4);
+        }
+
+        .confetti {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            top: -10px;
+            animation: confettiFall linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .elements-grid { grid-template-columns: 1fr; }
+            .modal-content { margin: 20px; padding: 30px; }
+            .test-container { padding: 30px; }
+            .paintings-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Эпоха Возрождения</h1>
+            <div class="subtitle">Ренессанс · Путешествие в мир искусства XIV–XVI веков</div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-label">Прогресс изучения: <span id="progress-text">0/5</span></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="elements-grid" id="elements-grid"></div>
+
+        <div class="test-btn-container">
+            <button class="test-btn" id="test-btn" disabled>Пройти тест</button>
+        </div>
+
+        <div class="test-container" id="test-container"></div>
+
+        <div class="results" id="results"></div>
+    </div>
+
+    <div class="timer" id="timer" style="display: none;">Время: <span id="timer-value">00:00</span></div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <script>
+        const elements = [
+            {
+                id: 1,
+                title: "Великие мастера Возрождения",
+                shortDesc: "Микеланджело, Рафаэль, Данте",
+                content: {
+                    definition: "В эпоху Возрождения диктат церкви над искусством ослабевает. Библейские сюжеты находят воплощение в скульптуре и живописи, но их герои теперь максимально приближены к реальному человеку — из плоти и крови. Человек и его бесконечно разнообразный внутренний мир воспевается в литературе и искусстве.",
+                    examples: [
+                        "«Божественная комедия» Данте — великое литературное произведение, в котором воспевается человек и его бесконечно разнообразный внутренний мир. Это произведение стало одним из символов эпохи Возрождения",
+                        "Микеланджело — художник, поэт и скульптор — создаёт уникальные по правдивости, силе и мощи изображения святых и пророков. Его знаменитая скульптура «Моисей» поражает силой и выразительностью",
+                        "Рафаэль Санти — младший современник Микеланджело — изображает Деву Марию (Мадонну) реальной, прекрасной и трогательной своей беззащитностью. «Сикстинская Мадонна» — одно из величайших произведений мировой живописи"
+                    ],
+                    paintings: [
+                        {
+                            title: "«Моисей»",
+                            author: "Микеланджело Буонарроти, скульптура",
+                            description: "Знаменитая скульптура «Моисей» Микеланджело поражает силой и выразительностью.",
+                            url: "painting1.jpg"
+                        },
+                        {
+                            title: "«Сикстинская Мадонна»",
+                            author: "Рафаэль Санти",
+                            description: "«Сикстинская Мадонна» Рафаэля — одно из величайших произведений мировой живописи.",
+                            url: "painting2.jpg"
+                        }
+                    ],
+                    quote: {
+                        text: "Человек и его бесконечно разнообразный внутренний мир воспевается в «Божественной комедии» Данте, в прекрасных и утончённых картинах Боттичелли.",
+                        author: "Из учебника"
+                    },
+                    errors: [
+                        "Ошибка: путать Микеланджело и Рафаэля",
+                        "Ошибка: думать, что «Сикстинская Мадонна» написана Микеланджело",
+                        "Ошибка: считать, что в Возрождении художники писали только религиозные сюжеты"
+                    ]
+                }
+            },
+            {
+                id: 2,
+                title: "Что такое Возрождение?",
+                shortDesc: "Ренессанс, гуманизм, противоречия эпохи",
+                content: {
+                    definition: "Эпоха Возрождения (Ренессанс) — одна из самых важных и противоречивых в истории человечества (XIV–XVI века). С одной стороны, провозглашаются ценности гуманизма и прославляется сила разума. С другой — свирепствует инквизиция, учёного Джордано Бруно сжигают на костре.",
+                    examples: [
+                        "В 1492 году Христофор Колумб, флотоводец из Генуи, открывает Америку",
+                        "Великий итальянский художник Леонардо да Винчи создаёт один из первых и лучших трактатов по анатомии человека",
+                        "Немецкий живописец Альбрехт Дюрер оставляет множество замечательных рисунков и гравюр, в том числе знаменитую гравюру «Носорог» (1515)"
+                    ],
+                    painting: {
+                        title: "«Носорог»",
+                        author: "Альбрехт Дюрер, гравюра, 1515",
+                        description: "Знаменитая гравюра Альбрехта Дюрера «Носорог» (1515).",
+                        url: "painting3.jpg"
+                    },
+                    quote: {
+                        text: "В центре ренессансной культуры оказывается человек, созданный по образу и подобию Божьему, находящийся в гармонии с окружающей его природой.",
+                        author: "Из учебника"
+                    },
+                    info: "Важно понять: Возрождение — это эпоха контрастов.",
+                    errors: [
+                        "Ошибка: думать, что Возрождение — это только про искусство",
+                        "Ошибка: считать Возрождение «светлой» эпохой без противоречий",
+                        "Ошибка: путать Возрождение со Средневековьем. В Средневековье центр всего — Бог, искусство служило церкви, а в эпоху Возрождения центр смещается на человека: провозглашается гуманизм, прославляется сила разума"
+                    ]
+                }
+            },
+            {
+                id: 3,
+                title: "Духовная музыка Возрождения",
+                shortDesc: "Полифония, мессы, мотеты, Палестрина",
+                content: {
+                    definition: "Духовная музыка продолжает развиваться в Италии, Франции и Нидерландах. Замечательные композиторы пишут большое количество месс и мотетов. Как и прежде, эти сочинения в большинстве своём предназначены для исполнения хором a cappella (без инструментального сопровождения).",
+                    examples: [
+                        "Гийом де Машо (Франция) — один из первых великих композиторов эпохи Возрождения",
+                        "Якоб Обрехт и Жоскен Депре (Нидерланды) — мастера полифонической техники",
+                        "Джованни Палестрина (Италия) — великий композитор, чья полифоническая техника настолько сложна и хитроумна, что её невозможно сравнивать с приёмами многоголосия эпохи Средневековья"
+                    ],
+                    painting: {
+                        title: "Портрет Джованни Палестрины",
+                        author: "Портрет эпохи Возрождения",
+                        description: "Портрет Джованни Палестрины — великого итальянского композитора.",
+                        url: "painting6.jpg"
+                    },
+                    info: "Важно понять: полифоническая техника Возрождения достигла невероятной сложности.",
+                    errors: [
+                        "Ошибка: думать, что a cappella — это пение с инструментами",
+                        "Ошибка: путать мессу и мотет. Месса — это большое богослужебное сочинение, состоящее из нескольких частей (Kyrie, Gloria, Credo, Sanctus, Agnus Dei), которое исполняется во время католической литургии. Мотет — меньшее по масштабу полифоническое сочинение на религиозный текст, не привязанное к определённой части богослужения. Месса — масштабное произведение, мотет — более камерное",
+                        "Ошибка: считать, что полифония Возрождения похожа на средневековую"
+                    ]
+                }
+            },
+            {
+                id: 4,
+                title: "Инструментальная музыка",
+                shortDesc: "Новые жанры: прелюдии, фантазии, токкаты",
+                content: {
+                    definition: "В профессиональном искусстве самостоятельное развитие получает инструментальная музыка, ранее находившаяся в тени своей вокальной «сестры».",
+                    examples: [
+                        "Жанры, которые обретут совершенную форму в эпоху барокко: прелюдии, фантазии, вариации, токкаты",
+                        "Появляются композиторы и исполнители-виртуозы на флейте, лютне, виолах",
+                        "В эпоху Средневековья господствовал орган, теперь появляются новые инструменты"
+                    ],
+                    painting: {
+                        title: "Музыкантши",
+                        author: "Неизвестный художник эпохи Возрождения",
+                        description: "Картина «Музыкантши» — женщины играют на лютне и других инструментах.",
+                        url: "painting5.jpg"
+                    },
+                    errors: [
+                        "Ошибка: думать, что в Возрождении была только вокальная музыка",
+                        "Ошибка: путать прелюдию и токкату. Прелюдия (от лат. praeludium — «предварительная игра») — это короткая вступительная пьеса, которая подготавливает слушателя к основному произведению или помогает музыканту настроиться. Токката (от итал. toccare — «касаться») — это виртуозное, технически сложное произведение, в котором исполнитель демонстрирует своё мастерство. Прелюдия — скромное вступление, токката — блестящее самостоятельное сочинение",
+                        "Ошибка: считать, что лютня — это современный инструмент"
+                    ]
+                }
+            },
+            {
+                id: 5,
+                title: "Музыка в образовании",
+                shortDesc: "Томас Морли и музыкальная культура общества",
+                content: {
+                    definition: "Музыка вновь становится одним из обязательных элементов образования. Умение петь и играть на инструменте теперь является нормой для всякого просвещённого человека.",
+                    examples: [
+                        "Сохранился учебник музыки Томаса Морли (1557–1603) за 1597 год. В предисловии описывается любопытный факт: один из молодых гостей, студент университета, был вынужден признаться, что не может петь по нотам вместе с другими гостями. Все возмущались: «Что это за воспитание!?» Студенту пришлось с великим стыдом учиться петь у учителя музыки, и тот занимался с ним, как с малым ребёнком",
+                        "Этот случай свидетельствует об уровне музыкальной культуры широких слоёв общества в Англии того времени",
+                        "Множество живописных полотен, на которых изображены музицирующие люди эпохи Возрождения, подтверждают всеобщее увлечение музыкой"
+                    ],
+                    painting: {
+                        title: "Хоровая книга",
+                        author: "Италия, Флоренция, около 1380 года",
+                        description: "Хоровая книга из Флоренции для исполнения духовной музыки.",
+                        url: "painting4.jpg"
+                    },
+                    errors: [
+                        "Ошибка: думать, что музыка была только для профессионалов",
+                        "Ошибка: считать, что нотная грамота была редкостью. Наоборот — незнание нот считалось позором для образованного человека"
+                    ]
+                }
+            }
+        ];
+
+        const testQuestions = [
+            {
+                question: "Эпоха Возрождения охватывает период ________ веков.",
+                answers: ["X–XII", "XIV–XVI", "XVII–XVIII"],
+                correct: 1,
+                hint: "Эпоха началась в 1300-х годах"
+            },
+            {
+                question: "Скульптуру «Моисей» создал ________.",
+                answers: ["Рафаэль", "Леонардо", "Микеланджело"],
+                correct: 2,
+                hint: "Этот мастер был также поэтом"
+            },
+            {
+                question: "«Сикстинская Мадонна» — произведение ________.",
+                answers: ["Рафаэля", "Боттичелли", "Дюрера"],
+                correct: 0,
+                hint: "Младший современник Микеланджело"
+            },
+            {
+                question: "«Божественная комедия» — произведение ________.",
+                answers: ["Данте", "Боттичелли", "Микеланджело"],
+                correct: 0,
+                hint: "Литературное произведение"
+            },
+            {
+                question: "Пение без инструментов называется ________.",
+                answers: ["a cappella", "мотет", "токката"],
+                correct: 0,
+                hint: "«Как в капелле»"
+            },
+            {
+                question: "Великий итальянский композитор полифонии — ________.",
+                answers: ["Машо", "Депре", "Палестрина"],
+                correct: 2,
+                hint: "Итальянец"
+            },
+            {
+                question: "Жанры барокко: прелюдии, фантазии, вариации и ________.",
+                answers: ["сонаты", "токкаты", "симфонии"],
+                correct: 1,
+                hint: "Виртуозное произведение"
+            },
+            {
+                question: "Инструменты Возрождения: флейта, виола и ________.",
+                answers: ["фортепиано", "лютня", "скрипка"],
+                correct: 1,
+                hint: "Предшественник гитары"
+            },
+            {
+                question: "В Средневековье в музыке господствовал ________.",
+                answers: ["орган", "клавесин", "арфа"],
+                correct: 0,
+                hint: "Клавишный духовой инструмент"
+            },
+            {
+                question: "Учебник музыки 1597 года написал ________.",
+                answers: ["Машо", "Морли", "Депре"],
+                correct: 1,
+                hint: "Англичанин 1557–1603"
+            }
+        ];
+
+        let visitedElements = new Set();
+        let timerInterval;
+        let seconds = 0;
+
+        function init() {
+            renderElements();
+            updateProgress();
+        }
+
+        function renderElements() {
+            const grid = document.getElementById('elements-grid');
+            grid.innerHTML = '';
+            
+            elements.forEach(el => {
+                const btn = document.createElement('div');
+                btn.className = 'element-btn';
+                btn.id = `element-${el.id}`;
+                btn.innerHTML = `
+                    <h3>${el.title}</h3>
+                    <p>${el.shortDesc}</p>
+                `;
+                btn.onclick = () => openCard(el);
+                grid.appendChild(btn);
+            });
+        }
+
+        function openCard(element) {
+            const modal = document.getElementById('modal');
+            const content = document.getElementById('modal-content');
+            
+            let infoHtml = '';
+            if (element.content.info) {
+                infoHtml = `
+                    <h3>Важно понять</h3>
+                    <div class="info-box">${element.content.info}</div>
+                `;
+            }
+
+            let quoteHtml = '';
+            if (element.content.quote) {
+                quoteHtml = `
+                    <div class="quote-box">
+                        <div class="quote-text">${element.content.quote.text}</div>
+                        <div class="quote-author">— ${element.content.quote.author}</div>
+                    </div>
+                `;
+            }
+
+            let paintingsHtml = '';
+            if (element.content.paintings) {
+                paintingsHtml = `
+                    <div class="paintings-grid">
+                        ${element.content.paintings.map(p => `
+                            <div class="painting-item">
+                                <div class="painting-item-inner">
+                                    <img src="${p.url}" alt="${p.title}" 
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="painting-fallback" style="display:none;">
+                                        <div class="painting-fallback-title">${p.title}</div>
+                                        <div class="painting-fallback-author">${p.author}</div>
+                                        <div class="painting-fallback-desc">${p.description}</div>
+                                    </div>
+                                </div>
+                                <div class="painting-item-caption">${p.title} — ${p.author}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } else if (element.content.painting) {
+                const p = element.content.painting;
+                paintingsHtml = `
+                    <div class="painting-frame">
+                        <div class="painting-inner">
+                            <img class="painting-img" src="${p.url}" alt="${p.title}" 
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="painting-fallback" style="display:none;">
+                                <div class="painting-fallback-title">${p.title}</div>
+                                <div class="painting-fallback-author">${p.author}</div>
+                                <div class="painting-fallback-desc">${p.description}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="painting-caption">${p.title} — ${p.author}</div>
+                `;
+            }
+            
+            content.innerHTML = `
+                <h2>${element.title}</h2>
+                ${paintingsHtml}
+                <h3>Что это такое?</h3>
+                <p>${element.content.definition}</p>
+                
+                <h3>Примеры</h3>
+                ${element.content.examples.map(ex => `
+                    <div class="example-box">${ex}</div>
+                `).join('')}
+                
+                ${quoteHtml}
+                ${infoHtml}
+                
+                <h3>Типичные ошибки</h3>
+                ${element.content.errors.map(err => `
+                    <div class="error-box">${err}</div>
+                `).join('')}
+                
+                <button class="close-btn" onclick="closeCard(${element.id})">Понял!</button>
+            `;
+            
+            modal.style.display = 'block';
+            visitedElements.add(element.id);
+            
+            const elementBtn = document.getElementById(`element-${element.id}`);
+            if (elementBtn) {
+                elementBtn.classList.add('visited');
+            }
+            
+            updateProgress();
+        }
+
+        function closeCard(elementId) {
+            document.getElementById('modal').style.display = 'none';
+            checkTestAvailability();
+        }
+
+        function updateProgress() {
+            const progress = visitedElements.size;
+            const total = elements.length;
+            document.getElementById('progress-text').textContent = `${progress}/${total}`;
+            document.getElementById('progress-fill').style.width = `${(progress / total) * 100}%`;
+        }
+
+        function checkTestAvailability() {
+            const testBtn = document.getElementById('test-btn');
+            if (visitedElements.size === elements.length) {
+                testBtn.disabled = false;
+            }
+        }
+
+        document.getElementById('test-btn').onclick = function() {
+            document.getElementById('elements-grid').style.display = 'none';
+            document.querySelector('.test-btn-container').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            document.getElementById('test-container').style.display = 'block';
+            document.getElementById('timer').style.display = 'block';
+            
+            startTimer();
+            renderTest();
+        };
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+                const secs = (seconds % 60).toString().padStart(2, '0');
+                document.getElementById('timer-value').textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function renderTest() {
+            const container = document.getElementById('test-container');
+            container.innerHTML = '<h2 style="font-family: Playfair Display; color: #5c3a21; margin-bottom: 35px; text-align: center; font-size: 2.4rem; border-bottom: 3px solid #c9a96e; padding-bottom: 15px; font-style: italic;">Тест по эпохе Возрождения</h2>';
+            
+            testQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-text">
+                        <strong>Вопрос ${index + 1}:</strong> ${q.question}
+                    </div>
+                    <div class="answers">
+                        ${q.answers.map((ans, ansIndex) => `
+                            <div class="answer-option" onclick="selectAnswer(${index}, ${ansIndex})">
+                                ${ans}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="hint-btn" onclick="showHint(${index})">Подсказка</button>
+                    <div class="hint-text" id="hint-${index}">${q.hint}</div>
+                `;
+                container.appendChild(questionDiv);
+            });
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'submit-test-btn';
+            submitBtn.textContent = 'Проверить ответы';
+            submitBtn.onclick = checkAnswers;
+            container.appendChild(submitBtn);
+        }
+
+        function selectAnswer(questionIndex, answerIndex) {
+            const question = document.querySelectorAll('.question')[questionIndex];
+            const options = question.querySelectorAll('.answer-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[answerIndex].classList.add('selected');
+            options[answerIndex].dataset.selected = 'true';
+        }
+
+        function showHint(index) {
+            document.getElementById(`hint-${index}`).style.display = 'block';
+        }
+
+        function checkAnswers() {
+            clearInterval(timerInterval);
+            let correct = 0;
+            const total = testQuestions.length;
+            
+            testQuestions.forEach((q, index) => {
+                const question = document.querySelectorAll('.question')[index];
+                const options = question.querySelectorAll('.answer-option');
+                let selected = -1;
+                
+                options.forEach((opt, optIndex) => {
+                    if (opt.dataset.selected === 'true') {
+                        selected = optIndex;
+                    }
+                    opt.onclick = null;
+                });
+                
+                if (selected === q.correct) {
+                    correct++;
+                    options[selected].classList.add('correct');
+                } else {
+                    if (selected !== -1) {
+                        options[selected].classList.add('incorrect');
+                    }
+                    options[q.correct].classList.add('correct');
+                }
+            });
+            
+            setTimeout(() => showResults(correct, total), 1500);
+        }
+
+        function showResults(correct, total) {
+            document.getElementById('test-container').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            const results = document.getElementById('results');
+            results.style.display = 'block';
+            
+            if (correct === total) {
+                results.className = 'results success';
+                results.innerHTML = `
+                    <h2>Отлично!</h2>
+                    <p>Ты настоящий знаток эпохи Возрождения!</p>
+                    <p>Правильных ответов: ${correct} из ${total}</p>
+                    <button class="restart-btn" onclick="restart()">Вернуться к карточкам</button>
+                `;
+                createConfetti();
+            } else {
+                results.className = 'results failure';
+                results.innerHTML = `
+                    <h2>Почти получилось!</h2>
+                    <p>Перечитай карточки и попробуй снова!</p>
+                    <p>Правильных ответов: ${correct} из ${total}</p>
+                    <button class="restart-btn" onclick="restart()">Вернуться к карточкам</button>
+                    <button class="restart-btn" onclick="retakeTest()">Пройти тест снова</button>
+                `;
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#c9a96e', '#a07840', '#6b8e23', '#cd853f', '#8b7355'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+
+        function restart() {
+            visitedElements.clear();
+            seconds = 0;
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('elements-grid').style.display = 'grid';
+            document.querySelector('.test-btn-container').style.display = 'block';
+            document.querySelector('.progress-container').style.display = 'block';
+            document.getElementById('test-btn').disabled = true;
+            renderElements();
+            updateProgress();
+        }
+
+        function retakeTest() {
+            seconds = 0;
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('test-container').style.display = 'block';
+            document.getElementById('timer').style.display = 'block';
+            startTimer();
+            renderTest();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
